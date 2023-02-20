@@ -16,6 +16,24 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
+    initAuth({ commit, dispatch }) {
+      let token = localStorage.getItem("token");
+      if (token) {
+        let expirationDate = localStorage.getItem("exprationDate");
+        let time = new Date().getTime();
+        if (time >= expirationDate) {
+          console.log("Tokenin süresi geçmişşşş.....");
+          dispatch("logout");
+        } else {
+          commit("setToken", token);
+          let timerSecond = +expirationDate - time;
+          dispatch("setTimeouTimer", timerSecond);
+          router.push("/login");
+        }
+      } else {
+        router.push("/");
+      }
+    },
     login({ commit, state, dispatch }, authData) {
       const API_URL = "http://localhost:5000/register/";
       const body = {
@@ -30,10 +48,28 @@ export const store = new Vuex.Store({
         .then((response) => {
           commit("setToken", response.data.token);
           router.push({ name: "home" });
+          localStorage.setItem("token", response.data.token);
+
+          localStorage.setItem("expirationDate", new Date().getTime() + 10000);
+          dispatch("setTimeoutTimer", 10000);
+
+          //      dispatch("setTimeoutTimer", +response.data.expressIn);
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    logout({ commit }) {
+      commit("clearToken");
+      localStorage.removeItem("expirationDate");
+      localStorage.removeItem("token");
+      router.push("/login");
+    },
+
+    setTimeoutTimer({ dispatch }, expressIn) {
+      setTimeout(() => {
+        dispatch("logout");
+      }, expressIn);
     },
   },
   getters: {
