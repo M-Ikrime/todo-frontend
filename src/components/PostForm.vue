@@ -59,6 +59,7 @@ export default {
       title: "",
       content: "",
       creator: "",
+      user_id: "",
       errorMesage: "",
     };
   },
@@ -81,8 +82,11 @@ export default {
           content: this.content,
           creator: this.creator,
         };
-
-        const response = await axios.post(API_URL, body);
+        const response = await axios.post(API_URL, body, {
+          headers: {
+            Authorization: this.$store.getters.getToken,
+          },
+        });
         console.log(response);
         router.push({ name: "home" });
       } catch (error) {

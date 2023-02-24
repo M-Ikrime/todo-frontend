@@ -11,6 +11,23 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
+      path: "/",
+      name: "home",
+      component: home,
+      beforeEnter(to, from, next) {
+        try {
+          if (store.getters.isAuthenticated) {
+            next();
+          } else {
+            next("/login");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
+
+    {
       path: "/signup",
       name: "signup",
       component: signup,
@@ -22,26 +39,18 @@ export default new Router({
     },
 
     {
-      path: "/",
-      name: "home",
-      component: home,
-      beforeEnter(to, from, next) {
-        if (store.getters.isAuthenticated) {
-          next();
-        } else {
-          next("/login");
-        }
-      },
-    },
-    {
       path: "/create",
       name: "create",
       component: create,
       beforeEnter(to, from, next) {
-        if (store.getters.isAuthenticated) {
-          next();
-        } else {
-          next("/login");
+        try {
+          if (store.getters.isAuthenticated) {
+            next();
+          } else {
+            next("/login");
+          }
+        } catch (error) {
+          console.log(error);
         }
       },
     },
@@ -50,10 +59,14 @@ export default new Router({
       name: "update",
       component: update,
       beforeEnter(to, from, next) {
-        if (store.getters.isAuthenticated) {
-          next();
-        } else {
-          next("/login");
+        try {
+          if (store.getters.isAuthenticated) {
+            next();
+          } else {
+            next("/login");
+          }
+        } catch (error) {
+          console.log(error);
         }
       },
     },

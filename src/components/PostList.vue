@@ -26,47 +26,54 @@
 
       <button @click="removePost(post._id)" class="deleteBtn">Delete</button>
     </div>
-  </div>
+    <!--
+    <button @click="test()" class="deleteBtn">test</button>
+  --></div>
 </template>
 <script>
 import router from "@/router/router";
+import axios from "axios";
 import { ref, onMounted } from "vue";
 export default {
   name: "PostList",
-
   setup() {
     const posts = ref([]);
     const API_URL = "http://localhost:5000/api/posts/";
     onMounted(() => {
       getPosts();
     });
-
     async function getPosts() {
-      const response = await fetch(API_URL);
-      const json = await response.json();
-      posts.value = json;
-    }
-    async function removePost(_id) {
-      const response = await fetch(`${API_URL}/${_id}`, {
-        method: "DELETE",
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: this.$store.getters.getToken,
+        },
       });
-      return response, getPosts();
+      posts.value = response.data;
     }
-
-    async function editPost(_id) {
+    return {
+      posts,
+    };
+  },
+  methods: {
+    removePost: async function (_id) {
+      const response = await axios.delete(
+        `http://localhost:5000/api/posts/${_id}`,
+        {
+          headers: {
+            Authorization: this.$store.getters.getToken,
+          },
+        }
+      );
+      return response;
+    },
+    editPost: async function (_id) {
       router.push({
         name: "update",
         params: {
           id: _id,
         },
       });
-    }
-
-    return {
-      posts,
-      removePost,
-      editPost,
-    };
+    },
   },
 };
 </script>

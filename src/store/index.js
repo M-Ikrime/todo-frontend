@@ -30,28 +30,28 @@ export const store = new Vuex.Store({
           dispatch("setTimeouTimer", timerSecond);
           router.push("/login");
         }
-      } else {
-        router.push("/");
-      }
+      } /**else {
+        router.push("/home");
+      }*/
     },
-    login({ commit, state, dispatch }, authData) {
+    login({ commit, dispatch }, authData) {
       const API_URL = "http://localhost:5000/register/";
       const body = {
         username: authData.username,
         password: authData.password,
         returnSecureToken: true,
       };
-      console.log(dispatch);
-      console.log(state);
       axios
         .post(API_URL, body)
         .then((response) => {
           commit("setToken", response.data.token);
-          router.push({ name: "home" });
+          router.push({ name: "home" }).catch(() => {});
           localStorage.setItem("token", response.data.token);
-
-          localStorage.setItem("expirationDate", new Date().getTime() + 10000);
-          dispatch("setTimeoutTimer", 10000);
+          localStorage.setItem(
+            "expirationDate",
+            new Date().getTime() + 1000000
+          );
+          dispatch("setTimeoutTimer", 1000000);
 
           //      dispatch("setTimeoutTimer", +response.data.expressIn);
         })
@@ -63,7 +63,7 @@ export const store = new Vuex.Store({
       commit("clearToken");
       localStorage.removeItem("expirationDate");
       localStorage.removeItem("token");
-      router.push("/login");
+      router.push("/login").catch(() => {});
     },
 
     setTimeoutTimer({ dispatch }, expressIn) {
@@ -75,6 +75,9 @@ export const store = new Vuex.Store({
   getters: {
     isAuthenticated(state) {
       return state.token !== "";
+    },
+    getToken(state) {
+      return state.token;
     },
   },
 });
