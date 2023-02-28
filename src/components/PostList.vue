@@ -20,6 +20,7 @@
       
 
       -->
+
       <button class="editBtn" @click="editPost(post._id)" role="link">
         Edit
       </button>
@@ -33,26 +34,25 @@
 <script>
 import router from "@/router/router";
 import axios from "axios";
-import { ref, onMounted } from "vue";
 export default {
   name: "PostList",
-  setup() {
-    const posts = ref([]);
+  data() {
+    return {
+      posts: [],
+    };
+  },
+  mounted() {
     const API_URL = "http://localhost:5000/api/posts/";
-    onMounted(() => {
-      getPosts();
-    });
-    async function getPosts() {
-      const response = await axios.get(API_URL, {
+    const response = axios
+      .get(API_URL, {
         headers: {
           Authorization: this.$store.getters.getToken,
         },
+      })
+      .then((response) => {
+        this.posts = response.data;
       });
-      posts.value = response.data;
-    }
-    return {
-      posts,
-    };
+    console.log(response);
   },
   methods: {
     removePost: async function (_id) {
@@ -64,6 +64,7 @@ export default {
           },
         }
       );
+      window.location.reload();
       return response;
     },
     editPost: async function (_id) {

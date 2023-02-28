@@ -66,11 +66,17 @@ export default {
   mounted() {
     if (this.type == "edit") {
       const id = this.$route.params.id;
-      axios.get(`http://localhost:5000/api/posts/${id}`).then((response) => {
-        this.title = response.data.title;
-        this.content = response.data.content;
-        this.creator = response.data.creator;
-      });
+      axios
+        .get(`http://localhost:5000/api/posts/${id}`, {
+          headers: {
+            Authorization: this.$store.getters.getToken,
+          },
+        })
+        .then((response) => {
+          this.title = response.data.title;
+          this.content = response.data.content;
+          this.creator = response.data.creator;
+        });
     }
   },
   methods: {
@@ -113,7 +119,7 @@ export default {
             putPost,
             {
               headers: {
-                "x-access-token": "token-value",
+                Authorization: this.$store.getters.getToken,
               },
             }
           );
