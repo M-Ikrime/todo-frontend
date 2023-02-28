@@ -29,10 +29,13 @@
             type="text"
             placeholder="Creater" />
         </div>
+        <div>
+          <input class="date-input" v-model="endDate" type="datetime-local" />
+        </div>
         <div class="btncontainer">
           <button
             v-if="!this.$route.params.id"
-            @click="submitBtnClick"
+            @click="submitBtnClick()"
             style="background-color: #e0954f"
             class="button is-link">
             Submit
@@ -59,6 +62,7 @@ export default {
       title: "",
       content: "",
       creator: "",
+      endDate: "",
       user_id: "",
       errorMesage: "",
     };
@@ -76,6 +80,7 @@ export default {
           this.title = response.data.title;
           this.content = response.data.content;
           this.creator = response.data.creator;
+          this.endDate = response.data.endDate;
         });
     }
   },
@@ -87,6 +92,7 @@ export default {
           title: this.title,
           content: this.content,
           creator: this.creator,
+          endDate: this.endDate,
         };
         const response = await axios.post(API_URL, body, {
           headers: {
@@ -112,6 +118,7 @@ export default {
           title: this.title,
           content: this.content,
           creator: this.creator,
+          endDate: this.endDate,
         };
         try {
           const res = await axios.put(

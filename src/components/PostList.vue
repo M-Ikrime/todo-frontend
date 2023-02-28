@@ -10,8 +10,13 @@
             {{ post.content }}
           </p>
         </div>
+
         <div class="creator">
-          <h4>Yazar : {{ post.creator }}</h4>
+          <h4>Yazar: {{ post.creator }}</h4>
+          <div>
+            <h2>End Date: {{ toDate(post.endDate) }}</h2>
+            <h2>Remaining Time:{{ remainingTime(post.endDate) }}</h2>
+          </div>
         </div>
       </div>
       <!--
@@ -34,6 +39,7 @@
 <script>
 import router from "@/router/router";
 import axios from "axios";
+import moment from "moment";
 export default {
   name: "PostList",
   data() {
@@ -74,6 +80,15 @@ export default {
           id: _id,
         },
       });
+    },
+    toDate: function (date) {
+      return moment(date).format("MM-DD-YYYY hh:mm:ss");
+    },
+
+    remainingTime: function (date) {
+      const endDate = moment(date).format("MM-DD-YYYY hh:mm:ss");
+
+      return endDate;
     },
   },
 };
@@ -121,5 +136,13 @@ export default {
 .deleteBtn:hover {
   border-color: currentColor; /* Current Color = mevcut text rengi */
   background-color: #c5d1cb;
+}
+
+.creator {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 19px;
+  font-weight: bold;
 }
 </style>
