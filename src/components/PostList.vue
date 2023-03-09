@@ -1,5 +1,8 @@
 <template>
   <div class="blog">
+    <div class="time">
+      <h2>Time: {{ nowTime }}</h2>
+    </div>
     <div v-for="post in posts" :key="post._id" class="Listcontainer">
       <div class="contentList">
         <div class="title">
@@ -12,29 +15,22 @@
         </div>
 
         <div class="creator">
-          <h4>Yazar: {{ post.creator }}</h4>
+          <h4>Creator: {{ post.creator }}</h4>
           <div>
-            <h2>End Date: {{ toDate(post.endDate) }}</h2>
-            <h2>Remaining Time:{{ remainingTime(post.endDate) }}</h2>
+            <h4>End Date : {{ endDate(post.endDate) }}</h4>
+            <h4>Remaining Time : {{ remainingtime(post.endDate) }}</h4>
           </div>
         </div>
       </div>
-      <!--
-<router-link to="update" custom v-slot="{ navigate }">
-      </router-link>
-      
-
-      -->
 
       <button class="editBtn" @click="editPost(post._id)" role="link">
         Edit
       </button>
 
       <button @click="removePost(post._id)" class="deleteBtn">Delete</button>
+      <h2 v-if="post.finishTime">asdfa</h2>
     </div>
-    <!--
-    <button @click="test()" class="deleteBtn">test</button>
-  --></div>
+  </div>
 </template>
 <script>
 import router from "@/router/router";
@@ -44,7 +40,11 @@ export default {
   name: "PostList",
   data() {
     return {
-      posts: [],
+      posts: {
+        finishTime: false,
+      },
+      nowTime: moment(new Date()).format(" kk:mm:ss"),
+      remTime: "",
     };
   },
   mounted() {
@@ -59,6 +59,13 @@ export default {
         this.posts = response.data;
       });
     console.log(response);
+
+    setInterval(() => {
+      this.nowTime = moment(new Date()).format("kk:mm:ss ");
+    }, 1000);
+  },
+  watch: {
+    async nowTime() {},
   },
   methods: {
     removePost: async function (_id) {
@@ -81,14 +88,26 @@ export default {
         },
       });
     },
-    toDate: function (date) {
-      return moment(date).format("MM-DD-YYYY hh:mm:ss");
+    endDate: function (date) {
+      return moment(date).format("MM-DD-YYYY hh:mm:ss ");
     },
+    remainingtime: function (date) {
+      const endDate = moment(date);
+      const nowDate = moment(new Date());
+      const t = endDate - nowDate;
+      if (t > 0) {
+        let days = Math.floor(t / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-    remainingTime: function (date) {
-      const endDate = moment(date).format("MM-DD-YYYY hh:mm:ss");
-
-      return endDate;
+        let minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((t % (1000 * 60)) / 1000);
+        const sonuc = `${days} day ${hours} hour ${minutes} minutes ${seconds} seconds`;
+        return sonuc;
+      } else {
+        this.posts.finishTime = true;
+        console.log(this.posts.finishTime);
+        return `The Time is Over `;
+      }
     },
   },
 };
@@ -144,5 +163,14 @@ export default {
   justify-content: space-between;
   font-size: 19px;
   font-weight: bold;
+}
+.time {
+  margin-top: 15px;
+  width: 100%;
+  background-color: #757d82;
+  text-align: center;
+  font-size: 20px;
+  color: azure;
+  border-radius: 12px;
 }
 </style>
