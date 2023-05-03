@@ -11,22 +11,6 @@
         v-model="user.password"
         class="inputContainer"
         placeholder="Password" />
-      <!--
-      <input
-        class="inputContainer"
-        list="jobs"
-        id="job"
-        name="job"
-        placeholder="Job" />
-
-        <datalist id="jobs">
-        <option value="FullStack"></option>
-        <option value="Frontend"></option>
-        <option value="Backend"></option>
-        <option value="Mobil"></option>
-        <option value=".netçi"></option>
-      </datalist>
-      -->
       <div class="btnContainer">
         <button @click="loginClick" class="lognbtnContainer">Login</button>
         <button @click="signup" class="signBtnContainer">Signup</button>

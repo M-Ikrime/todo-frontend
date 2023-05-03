@@ -53,8 +53,6 @@ export const store = new Vuex.Store({
             new Date().getTime() + 1000000
           );
           dispatch("setTimeoutTimer", 1000000);
-
-          //      dispatch("setTimeoutTimer", +response.data.expressIn);
         })
         .catch((error) => {
           console.log(error);
@@ -82,28 +80,3 @@ export const store = new Vuex.Store({
     },
   },
 });
-/*
- *     posts: [],
- *     getCompletedPosts(state) {
-      return state.posts;
-    },
-        insertTodos(state, payload) {
-      state.posts = payload;
-    },
-    fetchTodos({ commit }) {
-      axios
-        .get("http://localhost:5000/posts", {
-          headers: {
-            "Ocp-Apim-Subscription-Key": "your key",
-          },
-        })
-        .then((response) => response.data)
-        .then((posts) => {
-          console.log(posts);
-          commit("insertTodos", posts);
-        });
-    },
-
-
- * 
-*/

@@ -18,7 +18,6 @@
 </template>
 <script>
 import router from "@/router/router";
-// import axios from "axios";
 export default {
   name: "LoginPage",
   data() {

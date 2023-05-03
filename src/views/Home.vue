@@ -8,7 +8,6 @@
 <script>
 import PostList from "@/components/PostList.vue";
 /*eslint-disable */
-
 export default {
   name: "home",
   components: {
